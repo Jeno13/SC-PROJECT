@@ -1,0 +1,36 @@
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800 text-capitalize"><%=title%></h1>
+</div>
+
+<% if (!requests?.length) { %>
+    <p>There are no requests submitted</p>
+<% } else { %>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Request Date</th>
+                <th>Status</th>
+                <th>Messages</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% requests.forEach((request) => { %>
+                <tr>
+                    <td>
+                        <a href="/project/<%= request.project.id %>" target="_blank" class="text-gray-800 text-decoration-underline"><%= request.project.title %></a>
+                    </td>
+                    <td><%= request.createdAt.toLocaleDateString('en-EG') %></td>
+                    <td class="text-capitalize text-<%= request.status === 'pending' ? 'warning' : 'success' %>">
+                        <!-- Add clock icon for pending status and check icon for accepted -->
+                        <i class="fa fa-<%= request.status === 'pending' ? 'clock' : 'check-circle' %>"></i>
+                        <%= request.status %>
+                    </td>
+                    <td>
+                        <a href="/dashboard/projects/<%= request.project._id %>/request/<%= request._id%>/messages" class="btn btn-secondary btn-sm"><i class="fa fa-envelope"></i> message student</a>
+                    </td>
+                </tr>
+                <% })%>
+        </tbody>
+    </table>
+<% } %>

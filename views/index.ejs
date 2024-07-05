@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold">What is CHANGE</h6>
+        </div>
+        <div class="card-body">
+            <p>Chance is a website to help recently graduated students, students who are on, or students who have new and creative ideas and exceptional projects to find funding and financiers for this project.</p>
+        </div>
+    </div>
+    <p class="mb-2 text-black text-uppercase fw-bold">Categories</p>
+    <div class="row">
+        <% categories.forEach((category)=> { %>
+            <div class="col-lg-4 mb-4">
+                <a href="/category/<%= category.id %>" class="card border-left-dark shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="text-primary text-uppercase mb-1 text-gray-800"><%= category.name %></div>
+                    </div>
+                </a>
+            </div>
+        <% })%>
+    </div>
+
+    <hr />
+    <p class="mb-2 text-black text-uppercase fw-bold">Latest projects</p>
+    <p class="mb-4">Discover latest projects by category</p>
+    <% if (projects?.length) { %>
+    <table class="table table-bordered mb-5">
+        <thead>
+            <tr>
+                <th width="35%">Project</th>
+                <th>Category</th>
+                <th>Student</th>
+                <th width="150">Published at</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% projects.forEach((project)=> { %>
+                <tr>
+                    <td>
+                        <a href="/project/<%= project.id %>" class="text-gray-800 text-decoration-underline"><%= project.title %></a>
+                    </td>
+                    <td>
+                        <a href="/category/<%= project.category.id %>" class="text-gray-800 text-decoration-underline"><%= project.category.name %></a>
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-start align-items-center">
+                            <img src="<%= project.user.profilePicture ?  '/uploads/users/' + project.user.profilePicture : ' /images/student.svg' %>" width="24" height="24" class="mr-1 rounded-circle">
+                            <%= project.user.name %>
+                        </div>
+                    </td>
+                    <td><%= project.createdAt.toLocaleDateString('en-EG') %></td>
+                </tr>
+                <% }) %>
+        </tbody>
+    </table>
+    <% } else {%>
+        <img src="/images/no-data.avif" class="m-auto d-block" />
+    <% }%>
+
+</div>

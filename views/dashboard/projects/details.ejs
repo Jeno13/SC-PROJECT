@@ -1,0 +1,140 @@
+<div class="mt-5">
+    <header class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fs-5 text-black text-uppercase fw-bold m-0 p-0">Project Details</h1>
+    </header>
+    <!-- Project main information -->
+    <table class="table table-bordered mb-4">
+        <tr>
+            <th>Title:</th>
+            <td>
+                <%=project.title %>
+            </td>
+        </tr>
+        <tr>
+            <th>Category:</th>
+            <td>
+                <a href="/category/<%= project.category._id %>" class="text-gray-800 text-decoration-underline"><%= project.category.name %></a>
+            </td>
+        </tr>
+        <tr>
+            <th>Published at:</th>
+            <td>
+                <%= project.createdAt.toLocaleDateString('en-EG') %>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Project Description -->
+    <div class="card mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold">Description</h6>
+        </div>
+        <div class="card-body">
+            <p><%=project.description %></p>
+        </div>
+    </div>
+
+    <!-- Project Requirements -->
+    <div class="card mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold">Requirements</h6>
+        </div>
+        <div class="card-body">
+            <p><%=project.requirements %></p>
+        </div>
+    </div>
+   
+    <!-- Project Attachment -->
+    <div class="card mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold">Attachment</h6>
+        </div>
+        <div class="card-body">
+            <% if (project.attachment) { %>
+                <a href="/uploads/<%=project.attachment %>" target="_blank"><%=project.attachment %></a>
+            <% } else { %>
+                <p class="m-0">No attachment for this project</p>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Project Requests -->
+    <div class="card mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold">Requests</h6>
+        </div>
+        <div class="card-body">
+            <% if (requests?.length) { %>
+                <table class="table table-bordered m-0">
+                    <thead>
+                        <tr>
+                            <th>Sponsor</th>
+                            <th width="150">Status</th>
+                            <th width="150">Published at</th>
+                            <th width="150">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% requests?.forEach((request)=> { %>
+                            <tr>
+                                <td>
+                                    <div class="d-flex justify-content-start align-items-center">
+                                        <img src="<%= request.sponsor.profilePicture ?  '/uploads/users/' + request.sponsor.profilePicture : ' /images/student.svg' %>" width="48" height="48" class="mr-1 rounded-circle">
+                                        <div>
+                                            <span><%= request.sponsor.name %></span>
+                                            <span class="d-block fst-italic small text-secondary"><%= request.sponsor.email %></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-capitalize text-<%= request.status === 'pending' ? 'warning' : 'success' %>">
+                                    <!-- Add clock icon for pending status and check icon for accepted -->
+                                    <i class="fa fa-<%= request.status === 'pending' ? 'clock' : 'check-circle' %>"></i>
+                                    <%= request.status %>
+                                </td>
+                                <td>
+                                    <%= request.createdAt.toLocaleDateString('en-EG') %>
+                                </td>
+                                <td width="250">
+                                    <!-- Display accept button if request is pending and there is no accepted request for this project -->
+                                    <% if (request.status === 'pending' && canAcceptRequests){ %>
+                                        <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#acceptModal-<%=request._id%>">
+                                            <span class="icon text-white">
+                                                <i class="fas fa-check-circle"></i> accept
+                                            </span>
+                                          </button>
+                                          
+                                          <!-- Accept Modal -->
+                                          <div class="modal fade" id="acceptModal-<%=request._id%>" data-bs-backdrop="static" data-bs-keyboard="false"tabindex="-1" aria-labelledby="acceptModal<%=request._id%>Label" aria-hidden="true">
+                                            <form method="post" action="/dashboard/projects/<%= project._id %>/request/<%= request._id %>/accept">
+                                                <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                    <h5 class="modal-title" id="acceptModal<%=request._id%>Label">Accept request</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Are you sure you want to accept request from <%= request.sponsor.name %>?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-dark">
+                                                       Yes, accept
+                                                    </button>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </form>
+                                          </div>
+                                    <% } %>
+                                    <a href="/dashboard/projects/<%= project._id %>/request/<%= request._id%>/messages" class="btn btn-secondary btn-sm"><i class="fa fa-envelope"></i> message</a>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+                <% } else {%>
+                    There are no requests for this project
+                <% }%>
+        </div>
+    </div>
+</div>

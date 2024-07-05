@@ -1,0 +1,33 @@
+<div class="container mt-5">
+    <p class="mb-2 text-black text-uppercase fw-bold"><%=category.name %> projects</p>
+    <p class="mb-4">Discover latest <%=category.name %> projects</p>
+    <% if (projects?.length) { %>
+    <table class="table table-bordered mb-5">
+        <thead>
+            <tr>
+                <th width="35%">Project</th>
+                <th>Student</th>
+                <th width="150">Published at</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% projects.forEach((project)=> { %>
+                <tr>
+                    <td>
+                        <a href="/project/<%= project.id %>" class="text-gray-800 text-decoration-underline"><%= project.title %></a>
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-start align-items-center">
+                            <img src="<%= project.user.profilePicture ?  '/uploads/users/' + project.user.profilePicture : ' /images/student.svg' %>" width="24" height="24" class="mr-1 rounded-circle">
+                            <%= project.user.name %>
+                        </div>
+                    </td>
+                    <td><%= project.createdAt.toLocaleDateString('en-EG') %></td>
+                </tr>
+                <% }) %>
+        </tbody>
+    </table>
+    <% } else {%>
+    <img src="/images/no-data.avif" class="m-auto d-block" />
+    <% }%>
+</div>

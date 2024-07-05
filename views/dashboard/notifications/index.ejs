@@ -1,0 +1,45 @@
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800 text-capitalize">Notificaitons</h1>
+</div>
+
+<% if (!notifications?.length) { %>
+    <p>You don't have any notifications</p>
+<% } else { %>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Notification</th>
+                <th width="120">Date</th>
+                <th width="200">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% notifications.forEach((notification) => { %>
+                <tr>
+                    <td>
+                        <a class="<%= notification.status === 'unread' ? 'fw-bold text-black' : 'text-gray-600' %>" href="/project/<%= notification.redirectsToId %>"><%= notification.message %></a>
+                    </td>
+                    <td><%= notification.createdAt.toLocaleDateString('en-EG') %></td>
+                    <td class="d-flex gap-2">
+                        <% if (notification.status === 'unread') { %>
+                            <form method="post" action="/dashboard/notifications/<%= notification._id %>/mark-read">
+                                <button type="submit" class="btn btn-dark btn-sm">
+                                    <span class="icon text-white">
+                                        <i class="fas fa-check-double"></i>
+                                    </span>
+                              </button>
+                            </form>
+                        <% } %>
+                        <form method="post" action="/dashboard/notifications/<%= notification._id %>/delete">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <span class="icon text-white">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                          </button>
+                        </form>
+                    </td>
+                </tr>
+                <% })%>
+        </tbody>
+    </table>
+<% } %>

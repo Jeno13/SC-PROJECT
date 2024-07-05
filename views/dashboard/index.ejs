@@ -1,0 +1,25 @@
+<div class="mb-4">
+    <img src="<%= user.profilePicture ?  '/uploads/users/' + user.profilePicture : ' /images/student.svg' %>" width="100" height="100" class="m-auto d-block rounded-circle">
+    <h1 class="h3 mb-0 text-gray-800 text-center">
+        <%= user.name %>
+    </h1>
+</div>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Name</th>
+        <td><%= user.name %></td>
+    </tr>
+    <tr>
+        <th>Mobile</th>
+        <td><%= user.mobile %></td>
+    </tr>
+    <tr>
+        <th>Email Address</th>
+        <td><%= user.email %></td>
+    </tr>
+    <tr>
+        <th>Account Type</th>
+        <td class="text-capitalize"><%= user.type %></td>
+    </tr>
+</table>

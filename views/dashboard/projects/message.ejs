@@ -1,0 +1,44 @@
+<div class="mt-5">
+    <header class="d-flex justify-content-between align-items-center">
+        <h1 class="fs-5 text-black text-uppercase fw-bold m-0 p-0">Project <%= project.title %> message</h1>
+        <% if (user.type === 'student') { %>
+            <a href="/dashboard/projects/<%= project.id %>" class="text-gray-800 text-decoration-underline">Back to project</a>
+        <% } else { %>
+            <a href="/dashboard/requests" class="text-gray-800 text-decoration-underline">Back to requests</a>
+        <% } %>
+    </header>
+    <p>Message <%= user.type === 'student' ? 'sponsor ' + sponsor.name : 'student ' + student.name %>  regarding project <%= project.title %></p>
+
+    <div class="row">
+        <div class="col-6">
+            <% if (messages.length) { %>
+                <div class="mb-2 bg-white">
+                    <% messages.forEach((message)=> { %>
+                        <div class="bg-white p-3">
+                            <header class="d-flex justify-content-<%= message.user._id.toString() === user.id ? 'end' : 'start' %> align-items-center">
+                                <img src="<%= message.user.profilePicture ?  '/uploads/users/' + message.user.profilePicture : ' /images/student.svg' %>" width="35" height="35" class="mr-1 rounded-circle">
+                                <div class="small">
+                                    <span class="fw-bold text-black"><%= message.user.name %></span> <br />
+                                    <time class="fst-italic" datetime="<%= message.createdAt %>"> <%= message.createdAt.toLocaleString('en-EG') %></time>
+                                </div>
+                            </header>
+                            <p class="px-3 py-2 text-<%= message.user._id.toString() === user.id ? 'end' : 'start' %>"><%= message.message %></p>
+                            <hr class="m-0" />
+                        </div>
+                    <% })%>
+                </div>
+            <% } %>
+
+            
+            <form method="post" class="mb-4">
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" name="message" placeholder="Enter your message" id="floatingMessage" required style="height: 150px"></textarea>
+                    <label for="floatingMessage">Your message</label>
+                </div>
+                <button type="submit" class="btn btn-dark btn-block btn-lg">
+                    <span class="text">Send</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

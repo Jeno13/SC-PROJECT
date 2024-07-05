@@ -1,0 +1,80 @@
+<div class="container mt-5">
+    <header class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fs-5 text-black text-uppercase fw-bold m-0 p-0">Project <%=project.title %></h1>
+        <% if(authenticated) {%>
+            <% if (user.type === "sponsor") {%>
+                <% if (project.request) {%>
+                    <% if (project.request.status === "pending") {%>
+                        <span class="text-warning"><i class="fas fa-exclamation-circle"></i> Your request for this project is pending</span>
+                    <% } else { %>
+                        <span class="text-success"><i class="fas fa-check"></i> Your request for this project accepted</span>
+                    <% } %>
+                <% } else if (canRequestProject) { %>
+                    <form method="post" action="/project/<%= project.id %>/request">
+                        <button class="btn btn-dark">Request</button>
+                    </form>
+                <% } else {%>
+                    <span class="text-gray-500"><i class="fas fa-check-circle"></i> There is a sponsor for this project</span>
+                <% } %>
+            <% } else { %>
+                <span class="text-gray-500"><i class="fas fa-exclamation-circle"></i> You're a student, only sponsors can request</span>
+            <% } %>
+        <% } else { %>
+            <span class="text-gray-500"><i class="fas fa-exclamation-circle"></i> Login as a sponsor to request</span>
+        <% } %>
+    </header>
+    <table class="table table-bordered mb-4">
+        <tr>
+            <th>Student:</th>
+            <td>
+                <div class="d-flex justify-content-start align-items-center">
+                    <img src="<%= project.user.profilePicture ?  '/uploads/users/' + project.user.profilePicture : ' /images/student.svg' %>" width="24" height="24" class="mr-2 rounded-circle">
+                    <%= project.user.name %>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>Category:</th>
+            <td>
+                <a href="/category/<%= project.category.id %>" class="text-gray-800 text-decoration-underline"><%= project.category.name %></a>
+            </td>
+        </tr>
+        <tr>
+            <th>Published at:</th>
+            <td>
+                <%= project.createdAt.toLocaleDateString('en-EG') %>
+            </td>
+        </tr>
+    </table>
+
+    <div class="card mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold">Description</h6>
+        </div>
+        <div class="card-body">
+            <p class="m-0"><%=project.description %></p>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold">Requirements</h6>
+        </div>
+        <div class="card-body">
+            <p class="m-0"><%=project.requirements %></p>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold">Attachment</h6>
+        </div>
+        <div class="card-body">
+            <% if (project.attachment) { %>
+                <a href="/uploads/<%=project.attachment %>" target="_blank"><%=project.attachment %></a>
+            <% } else { %>
+                <p class="m-0">No attachment for this project</p>
+            <% } %>
+        </div>
+    </div>
+</div>

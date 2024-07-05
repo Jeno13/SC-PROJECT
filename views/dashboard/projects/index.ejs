@@ -1,0 +1,79 @@
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Projects list</h1>
+</div>
+
+<% if (!projects?.length) { %>
+    <p>You don't have any projects</p>
+    <a href="/dashboard/projects/add" class="d-inline-block btn btn-dark">Click here to add your first projects</a>
+<% } else { %>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Requests</th>
+                <th width="120">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% projects.map((project)=> { %>
+                <tr>
+                    <td>
+                        <a href="/dashboard/projects/<%=project._id%>"><%= project.title %></a>
+                    </td>
+                    <td>
+                        <%= project.category.name %>
+                    </td>
+                    <td>
+                        <%= project.requests.length %>
+                    </td>
+                    <td>
+                        <a href="/dashboard/projects/<%= project._id %>/edit" class="btn btn-dark btn-sm">
+                            <span class="icon text-white">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                        </a>
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-<%=project._id%>">
+                            <span class="icon text-white">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                          </button>
+                          
+                          <!-- Delete Modal -->
+                          <div class="modal fade" id="deleteModal-<%=project._id%>" data-bs-backdrop="static" data-bs-keyboard="false"tabindex="-1" aria-labelledby="deleteModal<%=project._id%>Label" aria-hidden="true">
+                            <form method="post" action="/dashboard/projects/<%= project._id %>/delete">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModal<%=project._id%>Label">Delete <%= project.title %></h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- If project has requests display waarning message -->
+                                        <% if (project.requests.length) { %>
+                                            <p class="fw-bold text-danger m-0">There are <%= project.requests.length %> requests for this project</p>
+                                            <p>If you deleted this project all requests will be removed</p>
+                                        <% } else { %>
+                                            Are you sure you want to delete this project?
+                                        <% } %>
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-danger">
+                                        <% if (project.requests.length) { %>
+                                            Yes, I'm aware delete project and requests
+                                        <% } else { %>
+                                            Yes, delete
+                                        <% } %>
+                                    </button>
+                                    </div>
+                                </div>
+                                </div>
+                            </form>
+                          </div>
+                    </td>
+                </tr>
+                <% })%>
+        </tbody>
+    </table>
+<% } %>

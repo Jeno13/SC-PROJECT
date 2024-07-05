@@ -1,0 +1,36 @@
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Update Account</h1>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <form class="user" method="post" enctype="multipart/form-data">
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 150px;">Name</span>
+                <input type="text" class="form-control" name="name" value="<%= user.name %>" placeholder="Enter your name" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 150px;">Email</span>
+                <input type="email" class="form-control" name="email" value="<%= user.email %>" placeholder="Enter your email address" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 150px;">Mobile</span>
+                <input type="text" class="form-control" name="mobile" value="<%= user.mobile %>" placeholder="Enter your mobile number" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="width: 150px;">Profile Picture</span>
+                <input type="file" class="form-control" name="profilePicture" accept="image/png,image/gif,image/jpeg">
+            </div>
+            <button type="submit" class="btn btn-dark btn-block">
+                <span class="text">Update</span>
+            </button>
+            <% if(typeof errors !== 'undefined' && Object.keys(errors).length !== 0){ %>
+                <div class="alert alert-danger mt-3 mb-3" role="alert">
+                    <% Object.entries(errors).forEach(([key, value])=> { %>
+                        <p><%= value %></p>
+                    <% }); %>
+                </div>
+            <% } %>
+        </form>
+    </div>
+</div>

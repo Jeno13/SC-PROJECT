@@ -1,0 +1,47 @@
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Add a new project</h1>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <form class="user" method="post" enctype="multipart/form-data">
+            <div class="form-floating mb-3">
+                <input type="text" name="title" class="form-control" id="floatingTitle" placeholder="Project title" required>
+                <label for="floatingTitle">Title</label>
+              </div>
+            <div class="form-floating mb-3">
+                <select class="form-select" name="category" id="floatingCategories" required>
+                    <option value="" selected>Select category</option>
+                    <% categories.forEach((categoryObject) => { %>
+                        <option value="<%= categoryObject.id %>"><%= categoryObject.name %> </option>
+                    <%})%>
+                </select>
+                <label for="floatingCategories">Category</label>
+            </div>
+            <div class="form-floating mb-3">
+                <textarea class="form-control" name="description" placeholder="Add project description" id="floatingDescription" required style="height: 150px"></textarea>
+                <label for="floatingDescription">Description</label>
+            </div>
+            <div class="form-floating mb-3">
+                <textarea class="form-control" name="requirements" placeholder="Add project requirements" id="floatingRequirements" required style="height: 150px"></textarea>
+                <label for="floatingRequirements">Requirements</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="file" class="form-control" name="attachment" id="floatingAttachment"/>
+                <label for="floatingAttachment">Attachment</label>
+            </div>
+            <p class="text-mutted small">Add attachment file to project (optionally)</p>
+              
+            <button type="submit" class="btn btn-dark btn-block btn-lg">
+                <span class="text">Add</span>
+            </button>
+            <% if(typeof errors !== 'undefined' && Object.keys(errors).length !== 0){ %>
+                <div class="alert alert-danger mt-3 mb-3" role="alert">
+                    <% Object.entries(errors).forEach(([key, value])=> { %>
+                        <p><%= value %></p>
+                    <% }); %>
+                </div>
+            <% } %>
+        </form>
+    </div>
+</div>
