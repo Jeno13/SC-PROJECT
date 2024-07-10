@@ -83,29 +83,20 @@ const GET_ADD_PROJECT = async (req, res) => {
   res.render("dashboard/projects/add", data);
 };
 
+const { getCategories, handleFileUpload } = require('../helpers');
+
 const POST_ADD_PROJECT = async (req, res) => {
-  // set page data
-  let data = {
-    title: "Add a new project",
-    layout: "./layouts/dashboard-layout",
+  const data = {
+    title: 'Add a new project',
+    layout: './layouts/dashboard-layout',
     errors: {},
   };
 
-  // Get all categories from DB;
-  const categories = await Category.find();
-  // set categories to data object to be accessible from views
-  data.categories = categories;
-
-  // get params from request body
+  data.categories = await getCategories();
   const { title, category, description, requirements } = req.body;
 
   try {
-    // check if files exists on request then get attachment file
-    if (req.files) {
-      let attachment = req.files.attachment;
-      //Use the mv() method to place the file in the upload directory (i.e. "uploads")
-      attachment.mv("./public/uploads/" + attachment.name);
-    }
+    const attachment = handleFileUpload(req.files?.attachment);
 
     await Project.create({
       title,
@@ -113,16 +104,14 @@ const POST_ADD_PROJECT = async (req, res) => {
       description,
       requirements,
       user: req.session.user.id,
-      attachment: req?.files?.attachment ? req.files.attachment.name : "",
+      attachment,
     });
 
-    req.flash("success", `Project ${title} has been added sucessfully`);
-
-    return res.redirect("/dashboard/projects");
+    req.flash('success', `Project ${title} has been added successfully`);
+    res.redirect('/dashboard/projects');
   } catch (error) {
-    req.flash("error", `There was an error, please try again later`);
-
-    return res.render("dashboard/projects/add", data);
+    req.flash('error', 'There was an error, please try again later');
+    res.render('dashboard/projects/add', data);
   }
 };
 
