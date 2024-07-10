@@ -83,7 +83,7 @@ const GET_ADD_PROJECT = async (req, res) => {
   res.render("dashboard/projects/add", data);
 };
 
-const { getCategories, handleFileUpload } = require('../helpers');
+const { getCategories, handleFileUpload } = require('../models/helpers');
 
 const POST_ADD_PROJECT = async (req, res) => {
   const data = {
